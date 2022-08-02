@@ -1,0 +1,17 @@
+https://stackoverflow.com/questions/63849126/unable-to-view-kiali-dashboard
+
+To access kiali without istioctl/kubectl proxy, you have three options. As you found correctly, it depends on the kiali service type:
+
+1. ClusterIP (default)
+To use the default, set up a route from gateway to kiali service. This is done using VirtualService and DestinationRule. 
+You can than access kiali by eg <ingress-gateway-loadbalancer-id>.amazonaws.com/kiali
+
+2. NodePort
+You can change type to NodePort by setting the corresponding value on istio installation and access kiali by <ingress-gateway-loadbalancer-id>.amazonaws.com:20001/kiali``
+
+3. LoadBalancer
+You can change type to LoadBalancer by setting the corresponding value on istio installation. 
+A second elastic load balancer will be created on aws and the kiali service will have an external ip, like the ingressgateway service does. 
+You can now access it by <kiali-loadbalancer-id>.amazonaws.com/kiali
+
+In my testing scenario, it is fine with No3.
